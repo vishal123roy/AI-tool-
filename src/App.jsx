@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import { URL } from "./constant";
-import RecentSearch from "./components/recentSearch";
+import RecentSearch from "./components/RecentSearch";
 import QuestionAnswer from "./components/QuestionAnswer";
 
 const App = () => {
