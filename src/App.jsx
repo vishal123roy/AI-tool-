@@ -1,18 +1,22 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
-import { URL } from "./constant";
 import RecentSearch from "./components/RecentSearch";
 import QuestionAnswer from "./components/QuestionAnswer";
+import { Menu } from "lucide-react";
 
 const App = () => {
   const [question, setQuestion] = useState("");
   const [result, setResult] = useState([]);
+  const [open,setOpen] = useState(false);
   const [recentHistory, setRecentHistory] = useState(
     JSON.parse(localStorage.getItem("history"))
   );
   const [selectedHistory, setSelectedHistory] = useState("");
   const scrollToAns = useRef();
   const [loader,setLoader] = useState(false);
+  const [error,setError] = useState("");
+
+  const API_URL = import.meta.env.VITE_API_URL
 
   const askQuestion = async () => {
     try {
@@ -41,12 +45,18 @@ const App = () => {
         ],
       };
       setLoader(true)
-      let response = await fetch(URL, {
+      let response = await fetch(API_URL, {
         method: "POST",
         body: JSON.stringify(payload),
       });
 
       response = await response.json();
+      if(response?.error){
+          setLoader(false);
+          setQuestion("");
+          setResult([])
+          setError(response.error.message);
+      }
       setQuestion("");
       let dataString = response.candidates[0].content.parts[0].text;
       dataString = dataString.split("* ");
@@ -71,13 +81,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log(selectedHistory);
     askQuestion();
   }, [selectedHistory]);
 
   const [darkMode,setDarkMode] = useState('dark');
   useEffect(()=>{
-      console.log(darkMode)
       if(darkMode == 'dark'){
           document.documentElement.classList.add('dark');
       }else{
@@ -87,14 +95,15 @@ const App = () => {
 
   return (
     <div className={darkMode =='dark'?'dark':'light'}>
-    <div className="grid grid-cols-5 h-screen text-center">
-      <select onChange={(event)=>setDarkMode(event.target.value)} className="fixed dark:text-white text-zinc-800 bottom-0 p-5">
+    <div className="grid lg:grid-cols-5 h-screen text-center">
+      <select onChange={(event)=>setDarkMode(event.target.value)} className="hidden lg:block fixed z-50 dark:text-zinc-400 text-zinc-800 bottom-0 p-5 focus:outline-none">
         <option value={"dark"}>Dark</option>
         <option value={"light"}>Light</option>
       </select>
-      <RecentSearch recentHistory={recentHistory} setRecentHistory={setRecentHistory} setSelectedHistory={setSelectedHistory}/>
-      <div className="col-span-4 p-10">
-        <h1 className="text-4xl bg-clip-text text-transparent pb-3 bg-gradient-to-r from-pink-700 to-violet-700">
+      <div className="fixed top-5 left-5 dark:text-white" onClick={()=>{setOpen(!open)}}><Menu/></div>
+      <RecentSearch recentHistory={recentHistory} setRecentHistory={setRecentHistory} setSelectedHistory={setSelectedHistory} open={open} setOpen={setOpen}/>
+      <div className="col-span-4 p-5 sm:p-10">
+        <h1 className="text-2xl sm:text-4xl bg-clip-text text-transparent pb-3 bg-gradient-to-r from-pink-700 to-violet-700">
           Hello User,Ask me Anything</h1>
         {loader?
         <div role="status">
@@ -117,6 +126,7 @@ const App = () => {
           <span className="sr-only">Loading...</span>
         </div>
     :null}
+      {error && <span className="dark:text-white">{error}</span>}
         <div ref={scrollToAns} className="container h-110 overflow-y-auto overflow-x-hidden">
           <div className="dark:text-zinc-300 text-zinc-900">
             <ul>
@@ -127,7 +137,7 @@ const App = () => {
           </div>
         </div>
         <div
-          className="dark:bg-zinc-800 bg-violet-100 w-1/2 p-1 pr-5 dark:text-white text-zinc-800 dark:border-none border-none m-auto rounded-4xl 
+          className="dark:bg-zinc-800 bg-violet-100 sm:w-1/2 p-1 pr-5 dark:text-white text-zinc-800 dark:border-none border-none m-auto rounded-4xl 
         border border-zinc-700 flex h-16"
         >
           <input
@@ -143,7 +153,7 @@ const App = () => {
           </button>
         </div>
       </div>
-    </div>|
+    </div>
     </div>
   );
 };

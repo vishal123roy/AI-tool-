@@ -1,4 +1,3 @@
-import React from 'react'
 import Answers from './Answers'
 const QuestionAnswer = ({item,index}) => {
   return (
@@ -10,7 +9,7 @@ const QuestionAnswer = ({item,index}) => {
                   {item.type == "q" ? (
                     <li
                       key={index + Math.random()}
-                      className="text-right p-1 border-8 dark:bg-zinc-700 bg-violet-100 dark:border-zinc-700 border-violet-100 rounded-tl-3xl rounded-br-3xl rounded-bl-3xl w-fit"
+                      className="text-right p-0.5 border-4 dark:bg-zinc-700 bg-violet-100 dark:border-zinc-700 border-violet-100 rounded-tl-xl rounded-br-xl rounded-bl-xl sm:border-8 sm:rounded-bl-3xl sm:rounded-tl-3xl sm:rounded-br-3xl sm:p-1 w-fit"
                     >
                       <Answers
                         ans={item.text}

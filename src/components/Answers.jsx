@@ -35,24 +35,24 @@ const Answers = ({ ans, totalResult, index, type }) => {
     },
 
     h1({ children }) {
-      return <h1 className="text-xl font-bold text-white pt-3">{children}</h1>;
+      return <h1 className="text-xl font-bold dark:text-white text-zinc-800 pt-3">{children}</h1>;
     },
     h2({ children }) {
       return (
-        <h2 className="text-lg font-semibold text-white pt-2">{children}</h2>
+        <h2 className="text-lg font-semibold dark:text-white text-zinc-800 pt-2">{children}</h2>
       );
     },
     p({ children }) {
-      return <p className="text-white leading-relaxed py-1">{children}</p>;
+      return <p className="dark:text-white text-zinc-800 leading-relaxed py-1">{children}</p>;
     },
   };
 
   return (
     <>
       {(index === 0 && totalResult > 1) || isHeading ? (
-        <h2 className="pt-2 text-lg font-semibold text-white">{answer}</h2>
+        <h2 className="pt-2 text-lg font-semibold dark:text-white text-zinc-900">{answer}</h2>
       ) : (
-        <div className={type === "q" ? "pl-1" : "pl-5"}>
+        <div className={type === "q" ? "pl-1" : "sm:pl-5"}>
           <ReactMarkdown components={renderer}>{ans}</ReactMarkdown>
         </div>
       )}
