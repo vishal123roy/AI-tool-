@@ -47,7 +47,7 @@ const App = () => {
         ],
       };
       setLoader(true)
-      let response = await fetch(API_URL, {
+      let response = await fetch("/api/result", {
         method: "POST",
         body: JSON.stringify(payload),
       });
