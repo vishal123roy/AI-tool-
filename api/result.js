@@ -15,10 +15,12 @@ export default async function handler(req, res) {
       },
     ]
   };
-  const result = await fetch(URL,{
+  let result = await fetch(URL,{
     method: "POST",
     body: JSON.stringify(payload),
   });
   console.log(result);
+  result = await result.json(); 
+
   res.status(200).json(result);
 }
