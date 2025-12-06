@@ -39,17 +39,11 @@ const App = () => {
       }
 
       const payloadData = question ? question : selectedHistory;
-      const payload = {
-        contents: [
-          {
-            parts: [{ text: payloadData }],
-          },
-        ],
-      };
+
       setLoader(true)
       let response = await fetch("/api/result", {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payloadData),
       });
 
       response = await response.json();
